@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="contracts">
+        <item>CreateDocument</item>
+        <item>GetContent</item>
+        <item>GetMultipleContents</item>
+        <item>OpenDocument</item>
+        <item>OpenDocumentTree</item>
+        <item>OpenMultipleDocuments</item>
+        <item>PickContact</item>
+        <item>RequestMultiplePermissions</item>
+        <item>RequestPermission</item>
+        <item>StartActivityForResult</item>
+        <item>StartIntentSenderForResult</item>
+        <item>TakePicture</item>
+        <item>TakePicturePreview</item>
+        <item>TakeVideo</item>
+    </string-array>
+
+    <string-array name="descs">
+        <item>An ActivityResultContract to prompt the user to select a path for creating a new document, returning the content: Uri of the item that was created.</item>
+        <item>An ActivityResultContract to prompt the user to pick a piece of content, receiving a content:// Uri for that content that allows you to use android.content.ContentResolver#openInputStream(Uri) to access the raw data.</item>
+        <item>An ActivityResultContract to prompt the user to pick one or more a pieces of content, receiving a content:// Uri for each piece of content that allows you to use android.content.ContentResolver#openInputStream(Uri) to access the raw data.</item>
+        <item>An ActivityResultContract to prompt the user to open a document, receiving its contents as a file:/http:/content: Uri.</item>
+        <item>An ActivityResultContract to prompt the user to select a directory, returning the user selection as a Uri.</item>
+        <item>An ActivityResultContract to prompt the user to open (possibly multiple) documents, receiving their contents as file:/http:/content: Uris.</item>
+        <item>An ActivityResultContract to request the user to pick a contact from the contacts app.</item>
+        <item>An ActivityResultContract to request permissions</item>
+        <item>An ActivityResultContract to request a permission</item>
+        <item>An ActivityResultContract that doesn\'t do any type conversion, taking raw Intent as an input and ActivityResult as an output.</item>
+        <item>An ActivityResultContract that calls Activity#startIntentSender(IntentSender, Intent, int, int, int).</item>
+        <item>An ActivityResultContract to take a picture saving it into the provided content-Uri.</item>
+        <item>An ActivityResultContract to take small a picture preview, returning it as a Bitmap.</item>
+        <item>An ActivityResultContract to take a video saving it into the provided content-Uri.</item>
+    </string-array>
+</resources>
