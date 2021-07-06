@@ -13,9 +13,9 @@ import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
+import java.io.File
 import org.mightyfrog.android.activityresultcontractsample.databinding.ActivityMainBinding
 import org.mightyfrog.android.activityresultcontractsample.databinding.ListItemBinding
-import java.io.File
 
 /**
  * https://developer.android.com/reference/kotlin/androidx/activity/result/contract/ActivityResultContracts
@@ -28,43 +28,43 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
 
     private val createDocumentActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.CreateDocument()
+        ActivityResultContracts.CreateDocument()
     ) { uri ->
         log("$uri")
     }
 
     private val getContentActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.GetContent()
+        ActivityResultContracts.GetContent()
     ) { uri ->
         log("$uri")
     }
 
     private val getMultipleContentsActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.GetMultipleContents()
+        ActivityResultContracts.GetMultipleContents()
     ) { list ->
         log("$list")
     }
 
     private val openDocumentActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.OpenDocument()
+        ActivityResultContracts.OpenDocument()
     ) { uri ->
         log("$uri")
     }
 
     private val openDocumentTreeActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.OpenDocumentTree()
+        ActivityResultContracts.OpenDocumentTree()
     ) { uri ->
         log("$uri")
     }
 
     private val openMultipleDocumentsActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.OpenMultipleDocuments()
+        ActivityResultContracts.OpenMultipleDocuments()
     ) { list ->
         log("$list")
     }
 
     private val pickContactActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.PickContact()
+        ActivityResultContracts.PickContact()
     ) { uri ->
         log("$uri")
     }
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
      * does nothing if the permissions are already granted or denied (choose Ask every time to reset)
      */
     private val requestMultiplePermissionsActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
+        ActivityResultContracts.RequestMultiplePermissions()
     ) { map ->
         log("$map")
     }
@@ -87,37 +87,37 @@ class MainActivity : AppCompatActivity() {
      * does nothing if the permission is already granted or denied (choose Ask every time to reset)
      */
     private val requestPermissionActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission()
     ) { granted ->
         log("$granted")
     }
 
     private val startActivityForResultActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result ->
         log("$result")
     }
 
     private val startIntentSenderForResultActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
+        ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
         log("$result")
     }
 
     private val takePictureActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.TakePicture()
+        ActivityResultContracts.TakePicture()
     ) { success ->
         log("$success")
     }
 
     private val takePicturePreviewActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.TakePicturePreview()
+        ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         log("$bitmap")
     }
 
     private val takeVideoActivityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.TakeVideo()
+        ActivityResultContracts.TakeVideo()
     ) { bitmap ->
         log("$bitmap")
     }
@@ -167,7 +167,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestMultiplePermissions() {
-        requestMultiplePermissionsActivityResultLauncher.launch(arrayOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"))
+        requestMultiplePermissionsActivityResultLauncher.launch(
+            arrayOf(
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.ACCESS_COARSE_LOCATION"
+            )
+        )
     }
 
     private fun requestPermission() {
@@ -182,23 +187,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun startIntentSenderForResult() {
         LocationServices.getFusedLocationProviderClient(this).lastLocation
-                .addOnSuccessListener {
-                    log("Success. How do I make this fail to get a ResolvableApiException?")
+            .addOnSuccessListener {
+                log("Success. How do I make this fail to get a ResolvableApiException?")
+            }
+            .addOnFailureListener {
+                log("$it")
+                if (it is ResolvableApiException) {
+                    startIntentSenderForResultActivityResultLauncher.launch(
+                        IntentSenderRequest.Builder(
+                            it.resolution
+                        ).build()
+                    )
                 }
-                .addOnFailureListener {
-                    log("$it")
-                    if (it is ResolvableApiException) {
-                        startIntentSenderForResultActivityResultLauncher.launch(IntentSenderRequest.Builder(it.resolution).build())
-                    }
-                }
+            }
     }
 
     private fun takePicture() {
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "test.png")
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "test.png"
+        )
         val uri = FileProvider.getUriForFile(
-                this,
-                "$packageName.provider",
-                file)
+            this,
+            "$packageName.provider",
+            file
+        )
         takePictureActivityResultLauncher.launch(uri)
     }
 
@@ -207,11 +220,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun takeVideo() {
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "test.mp4")
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "test.mp4"
+        )
         val uri = FileProvider.getUriForFile(
-                this,
-                "$packageName.provider",
-                file)
+            this,
+            "$packageName.provider",
+            file
+        )
         takeVideoActivityResultLauncher.launch(uri)
     }
 
@@ -230,12 +247,14 @@ class MainActivity : AppCompatActivity() {
         android.util.Log.e(this::class.java.simpleName, msg)
     }
 
-    private inner class ContractItemAdapter(private val list: List<ContractItem>) : RecyclerView.Adapter<ContractItemViewHolder>() {
+    private inner class ContractItemAdapter(private val list: List<ContractItem>) :
+        RecyclerView.Adapter<ContractItemViewHolder>() {
 
         override fun getItemCount(): Int = list.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractItemViewHolder {
-            val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val holder = ContractItemViewHolder(binding)
 
             binding.root.setOnClickListener {
@@ -265,7 +284,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private inner class ContractItemViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    private inner class ContractItemViewHolder(private val binding: ListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(contract: ContractItem) {
             binding.root.tag = contract.name
@@ -275,7 +295,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     data class ContractItem(
-            val name: String,
-            val desc: String
+        val name: String,
+        val desc: String
     )
 }
