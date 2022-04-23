@@ -1,21 +1,25 @@
 package org.mightyfrog.android.activityresultcontractsample
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
-import java.io.File
 import org.mightyfrog.android.activityresultcontractsample.databinding.ActivityMainBinding
 import org.mightyfrog.android.activityresultcontractsample.databinding.ListItemBinding
+import java.io.File
 
 /**
  * https://developer.android.com/reference/kotlin/androidx/activity/result/contract/ActivityResultContracts
@@ -186,6 +190,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startIntentSenderForResult() {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(
+                this,
+                "ACCESS_FINE_LOCATION & ACCESS_COARSE_LOCATION permission required",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
         LocationServices.getFusedLocationProviderClient(this).lastLocation
             .addOnSuccessListener {
                 log("Success. How do I make this fail to get a ResolvableApiException?")
@@ -296,6 +313,6 @@ class MainActivity : AppCompatActivity() {
 
     data class ContractItem(
         val name: String,
-        val desc: String
+        val desc: String,
     )
 }
